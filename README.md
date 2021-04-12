@@ -7,3 +7,5 @@ Library yang dibutuhkan:
 - github.com/lib/pq
 
 Basis data: PostgreSQL
+
+Konfigurasi basis data: https://github.com/Muruyung/APIGO/blob/master/config/config.go
