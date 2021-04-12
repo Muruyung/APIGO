@@ -4,6 +4,7 @@ import (
 	"APIGO/config"
 	"APIGO/model"
 	"APIGO/model/admin"
+	response "APIGO/view"
 	"fmt"
 	"strconv"
 
@@ -42,11 +43,19 @@ func Create(ctx iris.Context) {
 		return
 	}
 
-	admin.Post(DB, tb_admin)
+	err = admin.Post(DB, tb_admin)
+	response.Show(ctx, err)
 }
 
 func ReadAll(ctx iris.Context) {
-	ctx.JSON(admin.GetAll(DB))
+	res, err := admin.GetAll(DB)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	ctx.JSON(res)
 }
 
 func Update(ctx iris.Context) {
@@ -58,14 +67,18 @@ func Update(ctx iris.Context) {
 		return
 	}
 
-	admin.Put(DB, tb_admin)
+	err = admin.Put(DB, tb_admin)
+	response.Show(ctx, err)
 }
 
 func Delete(ctx iris.Context) {
 	id, err := strconv.ParseInt(ctx.Params().Get("id"), 10, 64)
+
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	admin.Delete(DB, id)
+
+	err = admin.Delete(DB, id)
+	response.Show(ctx, err)
 }
