@@ -5,6 +5,7 @@ import (
 	"APIGO/model"
 	"APIGO/model/admin"
 	"fmt"
+	"strconv"
 
 	"github.com/kataras/iris/v12"
 
@@ -25,10 +26,46 @@ func Init(app *iris.Application, db *xorm.Engine) {
 	adminAPI := config.Party(app, "/admin")
 	{
 		adminAPI.Use(iris.Compression)
-		adminAPI.Get("/", GetAll)
+		adminAPI.Post("/", Create)
+		adminAPI.Get("/", ReadAll)
+		adminAPI.Put("/", Update)
+		adminAPI.Delete("/{id}", Delete)
 	}
 }
 
-func GetAll(ctx iris.Context) {
+func Create(ctx iris.Context) {
+	var tb_admin model.Tb_admin
+	err := ctx.ReadJSON(&tb_admin)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	admin.Post(DB, tb_admin)
+}
+
+func ReadAll(ctx iris.Context) {
 	ctx.JSON(admin.GetAll(DB))
+}
+
+func Update(ctx iris.Context) {
+	var tb_admin model.Tb_admin
+	err := ctx.ReadJSON(&tb_admin)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	admin.Put(DB, tb_admin)
+}
+
+func Delete(ctx iris.Context) {
+	id, err := strconv.ParseInt(ctx.Params().Get("id"), 10, 64)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	admin.Delete(DB, id)
 }
