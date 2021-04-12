@@ -12,7 +12,7 @@ func DBCONFIG() string {
 	host := "localhost"
 	port := "5432"
 	user := "postgres"
-	pass := "titik.8kali"
+	pass := ""
 	dbname := "golang"
 	ssl := "disable"
 
